@@ -1,0 +1,83 @@
+{% extends "admin.html" %}
+{% load static %}
+
+{% block mentorTabButton %}
+<button class="nav-link active" id="nav-mentors-tab" data-bs-toggle="tab" data-bs-target="#nav-mentors" type="button" role="tab" aria-controls="nav-mentors-tab" aria-selected="true">
+  Mentors
+</button>
+{% endblock %}
+
+{% block mentorTabContent %}
+<div class="tab-pane fade active show" id="nav-mentors" role="tabpanel" aria-labelledby="nav-mentors-tab">
+
+  <div class="container-fluid mb-5">
+    <div class="sidebar flex-shrink-0 dashboard-navigation">
+      <div class="sidebar-heading d-flex align-items-center justify-content-center">
+        <h5>Mentors</h5>
+      </div>
+      <!-- buttons -->
+      <div class="container-fluid" style="overflow-x: auto;">
+        <div class="d-flex bd-highlight mb-2">
+          <div class="p-2 pt-3 bd-highlight">
+            <button type="button" onclick="alert('Convert user to mentor');" class="btn ms-auto btn-sm custom-btn">
+              <span class="iconify" data-icon="ant-design:user-add-outlined" data-width="25" data-height="25"></span>
+              Add Mentors
+            </button>
+          </div>
+          <div class="p-2 pt-3 bd-highlight">
+            <button type="button" onClick="window.location.reload()" class="btn btn-sm custom-btn" type="button">
+              <span class="iconify" data-icon="ci:refresh-02" data-width="25" data-height="25"></span>
+              Refresh List
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- table -->
+      <div class="table-div m-4 mt-2 mb-4">
+        <table class="table table-striped table-hover table-bordered" style="widows: 100%;" id="mentor-table">
+          <thead>
+            <tr>
+              <th scope="col" class="px-2 py-1 text-center">Name</th>
+              <th scope="col" class="px-2 py-1 text-center">User ID</th>
+              <th scope="col" class="px-2 py-1 text-center">Email</th>
+              <th scope="col" class="px-2 py-1 text-center">Active</th>
+              <th scope="col" class="px-2 py-1 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            {% for user in users %}
+            <tr>
+              <th scope="row" class="px-2 py-1 text-center">{{user.first_name}} {{user.last_name}}</th>
+              <td class="px-2 py-1 text-center">{{user.usr_id}}</td>
+              <td class="px-2 py-1 text-center">{{user.email}}</td>
+              <td class="px-2 py-1 text-center">
+                {% if user.is_active %}
+                <span class="badge bg-primary rounded-pill px-4 py-2">Active</span> {% else %}
+                <span class="badge bg-danger rounded-pill px-4 py-2">Inactive</span> {% endif %}
+              </td>
+              <td class="px-2 py-1 text-center">
+
+                <button type="button" class="btn btn-info ms-auto btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" style="border-color: black" onClick="window.location.href='{% url 'update-user' user.usr_id%}'">
+                  <span class="iconify" data-icon="bxs:edit" data-width="18" data-height="18"></span>
+                </button>
+                <form action="{% url 'delete-user' user.id %}" class="mb-0" style="display: inline-block" method='POST'>
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger ms-auto btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" style="border-color: black" onClick="return confirm('Are you sure Do you want to delete this user/account ?');">
+                    <span class="iconify" data-icon="ant-design:delete-filled" data-width="17" data-height="18"></span>
+                  </button>
+                </form>
+                <button type="button" class="btn btn-secondary ms-auto btn-sm" style="border-color: black" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Assign Students" onClick="window.location.href='{% url 'admin-assigned' user.usr_id %}'">
+                  <span class="iconify" data-icon="clarity:assign-user-solid" data-width="18" data-height="18"></span>
+                </button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

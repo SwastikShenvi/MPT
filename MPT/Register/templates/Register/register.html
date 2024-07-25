@@ -1,0 +1,178 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <title>MPT Sign-up</title>
+  <link rel="shortcut icon" href="{% static 'content/favicon.png' %}" type="image/x-icon">
+
+  <!-- Bootstrap cdn-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+  <!-- Local Stylesheet -->
+  <link href="{% static 'vendor/bootstrap/bootstrap.min.css' %}" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link href="{% static 'css/login.css' %}" rel="stylesheet">
+
+</head>
+
+<body class="">
+
+  <div class="logo">
+    <a class="" href="#">
+      <img style="box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5);" class="rounded-circle" src="{% static 'content/dbit.png' %}" width="60" height="60" alt="">
+    </a>
+  </div>
+
+  <main class="form-signin" style="max-width: 600px; ">
+    {% if page == 'StudentUser' %}
+    <form action="Sign-Up" method="POST">
+
+      <h1 class="h3 mb-3">{{title}}</h1>
+      <p style="opacity: 0.7;">Register by entering information below</p>
+      <div class="row">
+
+        {% csrf_token %}
+        <div class="col-6">
+          <div class="form-floating">
+            <input type="text" name="name" class="form-control top" placeholder="First Name" required>
+            <label for="inputFname">First Name</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="text" name="Lname" class="form-control middle" placeholder="Last Name" required>
+            <label for="inpuLname">Last Name</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="email" name="email" class="form-control middle" placeholder="Email" required>
+            <label for="inputemail">Email</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="email" name="email1" class="form-control bottom" placeholder="Re-enter Email" required>
+            <label for="inputemail1">Re-enter Email</label>
+          </div>
+
+        </div>
+
+
+
+        <div class="col-6">
+
+          <div class="form-floating">
+            <input type="text" name="usrID" class="form-control top" placeholder="User ID" required>
+            <label for="inputusrid">User ID</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="tel" name="phone" class="form-control middle" placeholder="Contact No." pattern="[0-9]{10}" required>
+            <label for="inputphone">Contact No.</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="password" name="password1" class="form-control middle" placeholder="Password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$"
+              oninvalid="this.setCustomValidity('Password must be at least 8 character and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character')" oninput="setCustomValidity('')" required>
+            <label for="inputpassword1">Password</label>
+          </div>
+
+          <div class="form-floating">
+            <input type="password" name="password2" class="form-control bottom" placeholder="Confirm Password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$" required>
+            <label for="inputpassword2">Confirm Password</label>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="d-grid col-6 mx-auto">
+        <button class=" btn btn-lg btn-primary" style="text-align: center;" type="submit">Reigister</button>
+        <p style="opacity: 0.8; text-align: center;">Already have an account? <a href="/"><strong>Login</strong></a></p>
+
+        {% if messages %}
+        {% for message in messages %}
+        {%  if forloop.first  %}
+        <div class="alert alert-danger d-flex align-items-center mb-0" style="height: 20px; width:30; justify-content: center;" role="alert">
+          {{ message }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+      </div>
+
+    </form>
+
+    <!--Add Admin-->
+    {% elif page == 'SuperUser' %}
+
+    <form action="{{ action }}" method="POST">
+
+      <h1 class="h3 mb-3">{{title}}</h1>
+      <p style="opacity: 0.7;">Register by entering information below</p>
+      <div class="row">
+
+        {% csrf_token %}
+        <div class="">
+          <input type="text" name="usr_id" class="form-control top" placeholder="User ID" required>
+        </div>
+
+        <div class="">
+          <input type="email" name="email" class="form-control middle" placeholder="Email" required>
+        </div>
+
+        <div class="">
+          <input type="email" name="email1" class="form-control middle" placeholder="Re-enter Email" required>
+        </div>
+
+        <div class="">
+          <input type="password" name="password1" class="form-control middle" placeholder="Password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$"
+            oninvalid="this.setCustomValidity('Password must be at least 8 character and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character')" oninput="setCustomValidity('')" required>
+        </div>
+
+        <div class="">
+          <input type="password" name="password2" class="form-control bottom" placeholder="Confirm Password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$"
+            oninvalid="this.setCustomValidity('Password must be at least 8 character and contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character')" oninput="setCustomValidity('')" required>
+        </div>
+
+      </div>
+
+      <div class="d-grid col-6 mx-auto">
+        <button class=" btn btn-md btn-primary" style="text-align: center;" type="submit">Register</button>
+
+        {% if messages %}
+        {% for message in messages %}
+        {%  if forloop.first  %}
+        <div class="alert alert-danger d-flex align-items-center mb-0" style="height: 20px; width:30; justify-content: center;" role="alert">
+          {{ message }}
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+      </div>
+
+    </form>
+    {% endif %}
+  </main>
+
+  <!-- Bootstrap cdn-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+  </script>
+
+  <!-- iconify -->
+  <script src="https://code.iconify.design/2/2.1.2/iconify.min.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- Local -->
+  <script src="{% static 'vendor/bootstrap/bootstrap.min.js' %}" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+  </script>
+  <script src="{% static 'js/login.js' %}"></script>
+
+</body>
+
+</html>

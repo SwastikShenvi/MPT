@@ -1,0 +1,76 @@
+{% extends "faculty.html" %}
+{% load static %}
+
+{% block dashboardButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="dashboard-tab" onclick="window.location.href = '{% url 'faculty' user.usr_id %}';" data-bs-toggle="pill" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+  aria-selected="true">
+  <span class="iconify" data-icon="ci:dashboard" data-width="20" data-height="20"></span>
+  &nbsp;Dashboard
+</button>
+{% endblock %}
+
+{% block dashboardContent %}
+<div class="tab-pane fade show active text" id="dashboard" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+  <!--Student Name-->
+  <p style="font-size: 25px; display: flex; justify-content: center;">
+    <strong>{{user.first_name}} {{user.last_name}} </strong>
+  </p>
+
+  <div class="d-flex align-items-center m-4">
+    <h1 style="font-size: 25px;">
+      <strong>Marks</strong>
+    </h1>
+
+    <button type="button" style="margin-right:10px" class="btn ms-auto btn-sm custom-btn" onclick="window.location.href = '{% url 'facultyAddCGPA' student.user.usr_id %}';">
+      Add CGPA
+    </button>
+
+    <button type="button" class="btn btn-sm custom-btn" onclick="window.location.href = '{% url 'facultyAddMarks' student.user.usr_id %}';">
+      Add Marks
+    </button>
+  </div>
+
+  <!-- table -->
+  <div class="table-div m-4">
+    <table class="table table-striped table-hover table-bordered text" style="widows: 100%;" id="marks-table">
+      <thead>
+        <tr>
+          <th scope="col" class="px-2 py-1 text-center">Subject Code</th>
+          <th scope="col" class="px-2 py-1 text-center">Subject Name</th>
+          <th scope="col" class="px-2 py-1 text-center">Sem</th>
+          <th scope="col" class="px-2 py-1 text-center">Year</th>
+          <th scope="col" class="px-2 py-1 text-center">Exam</th>
+          <th scope="col" class="px-2 py-1 text-center">Marks Received</th>
+          <th scope="col" class="px-2 py-1 text-center">Total Marks</th>
+          <th scope="col" class="px-2 py-1 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mark in marks %}
+        <tr>
+          <th scope="row" class="px-2 py-1 text-center">{{mark.sub_code}}</th>
+          <th scope="row" class="px-2 py-1 text-center">{{mark.sub_name}}</th>
+          <td class="px-2 py-1 text-center">{{mark.sem}}</td>
+          <td class="px-2 py-1 text-center">{{mark.academicYear}}</td>
+          <td class="px-2 py-1 text-center">{{mark.exam}}</td>
+          <td class="px-2 py-1 text-center">{{mark.marks}}</td>
+          <td class="px-2 py-1 text-center">{{mark.outof}}</td>
+          <td class="px-2 py-1 text-center">
+            <button type="button" class="btn btn-info ms-auto btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" style="border-color: black" onclick="window.location.href = '{% url 'facultyEditMarks' student.user.usr_id mark.id %}';">
+              <span class="iconify" data-icon="bxs:edit" data-width="18" data-height="18"></span>
+            </button>
+            <form action="{% url 'facultyDeleteMarks' student.user.usr_id mark.id %}" class="mb-0" style="display: inline-block" method='POST'>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger ms-auto btn-sm" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" style="border-color: black" onClick="return confirm('Are you sure Do you want to delete this record ?');">
+                <span class="iconify" data-icon="ant-design:delete-filled" data-width="17" data-height="18"></span>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

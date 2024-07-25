@@ -1,0 +1,166 @@
+/* ------------------ CSS file that stores globally used styles ------------------ */
+:root {
+  /*Colors taken from https://www.nordtheme.com/ */
+  /*Polar Night*/
+  --nord-0: #111318;
+  --nord-1: #3b4252;
+  --nord-2: #434c5e;
+  --nord-3: #4c566a;
+  /*Snow Storm*/
+  --nord-4: #d8dee9;
+  --nord-5: #e5e9f0;
+  --nord-6: #eceff4;
+  /*Frost*/
+  --nord-7: #8fbcbb;
+  --nord-8: #88c0d0;
+  --nord-9: #81a1c1;
+  --nord-10: #5e81ac;
+  /*Aurora*/
+  --nord-11: #bf616a;
+  --nord-12: #d08770;
+  --nord-13: #ebcb8b;
+  --nord-14: #a3be8c;
+  --nord-15: #b48ead;
+  /*-----------------------------*/
+  /* Colors from across the site */
+  --body-bg: #F0F4FB;
+  --navbar-bg: #3F72AF;
+  --btn-bg: #112D4E;
+  --content-bg: #DBE2EF;
+  --text-component: #E5E9F0;
+  --text-body: #111318;
+}
+
+/*tags*/
+body {
+  background-color: var(--body-bg);
+  font-size: .875rem;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+a {
+  color: var(--text-component);
+  /*text-shadow: 0 0 2px rgb(0, 0, 0);*/
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  /*text-shadow: 0 0 2px #fff;*/
+  color: var(--text-body);
+}
+h5 {
+  margin-bottom: 0;
+  /*text-shadow: 0 0 2px rgb(0, 0, 0);*/
+}
+p {
+  margin-bottom: 0;
+}
+h6 {
+  margin: 0;
+  line-height: 3.2;
+  color:  var(--text-component);
+}
+.form-control,
+.form-select {
+  background-color: var(--body-bg) !important;
+  color: var(--text-body) !important;
+}
+.form-control+label,
+.form-select+label {
+  color: var(--text-body) !important;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  z-index: 30;
+  width: 7px;
+  height: 0;
+  /* y-index: hidden; */
+}
+::-webkit-scrollbar-track {
+  background-color: var(--nord-0);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--nord-3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: transparent;
+}
+
+/*classes*/
+.custom-btn {
+  width: auto; 
+  border-radius: 7px; 
+  background-color:  var(--btn-bg); 
+  color:  var(--text-component); 
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.custom-btn:hover{
+  color: var(--btn-bg) !important;
+  background-color: var(--text-component) !important;
+  border: 1px solid rgba(0, 0, 0, 0.3) !important;
+}
+.update-btn{
+  width: auto; 
+  border-radius: 7px; 
+  background-color: #018383; 
+  color: white; 
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+.update-btn:hover{
+  background-color: white; 
+  color: #018383; 
+}
+.cancel-btn{
+  width: auto; 
+  border-radius: 7px; 
+  background-color: #8C0000; 
+  color: white; 
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.cancel-btn:hover{
+  width: auto; 
+  border-radius: 7px; 
+  background-color: white; 
+  color: #8C0000; 
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: none;
+  border-radius: 10px;
+  transform: scale(0.8);
+  transition: all 2s;
+  box-shadow: 0 0 5px 1.5px rgba(0, 0, 0, 0.5) !important;
+}
+.image2 {
+  width: 60px;
+  height: 60px;
+  border-radius: 5px; 
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5) !important;
+}
+.custom-section-title {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+.text {
+  color: var(--text-body);
+}
+.card-header,
+.card-body,
+.card-footer {
+  background-color: var(--body-bg) !important;
+}
+.dataTables_wrapper .dataTables_filter input,
+.dataTables_wrapper .dataTables_length select, 
+.dataTables_wrapper .dataTables_length, 
+.dataTables_wrapper .dataTables_filter, 
+.dataTables_wrapper .dataTables_info, 
+.dataTables_wrapper .dataTables_processing, 
+.dataTables_wrapper .dataTables_paginate {
+  color: var(--text-bg) !important;
+}

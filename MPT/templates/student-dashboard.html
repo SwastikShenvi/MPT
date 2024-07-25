@@ -1,0 +1,87 @@
+{% extends "student.html" %}
+{% load static %}
+
+{% block dashboardButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="dashboard-tab" onClick="window.location.href='{% url 'student' student.user.usr_id %}';" data-bs-toggle="pill" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+  aria-selected="true">
+  <span class="iconify" data-icon="ci:dashboard" data-width="20" data-height="20"></span>
+  &nbsp;Dashboard
+</button>
+{% endblock %}
+
+{% block editButton %}
+<button class="nav-link nav-pills-link text-left d-flex align-items-center" id="edit-tab" onclick="window.location.href = '{% url 'Edit' %}';" data-bs-toggle="pill" data-bs-target="#edit" type="button" role="tab" aria-controls="edit" aria-selected="false">
+  <span class="iconify" data-icon="akar-icons:edit" data-width="20" data-height="20"></span>
+  &nbsp;Edit Profile
+</button>
+{% endblock %}
+
+{% block dashboardContent %}
+<div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+  <section class="m-5 mt-1 text">
+    <span class="stu-prof-info">
+      <div class="stu-info">
+
+        <!--Student Name-->
+        <span class="h4 d-flex align-items-center justify-content-center text">
+          {% if student.is_assigned and mentor %}
+          <strong>Mentor: </strong>&nbsp;
+          {{ mentor }}
+          {% else %}
+          <strong> Mentor is Not Assigned </strong>&nbsp;
+          {% endif %}
+
+        </span>
+
+        <div class="row">
+
+          <!--Student Image-->
+          <div class="col-lg-2 col-md-12 col-sm-12 d-flex align-items-center justify-content-center">
+            <img src="{{user.profile_img.url}}" class="stu-image" alt="hero">          
+          </div>
+
+          <!-- Student Info -->
+          <div class="col-lg-10 accordion-div">
+            <div class="accordion accordion-flush rounded" id="accordionFlushExample">
+
+              <!--Student Information Accordion-->
+              {% include 'components/accordion-stu-info.html' %}
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </span>
+
+    <!--Edit marks button-->
+    <button type="button" class="btn btn-sm ms-auto select-btn d-flex align-items-center justify-content-center mt-4 custom-btn" onclick="window.location.href = '{% url 'studentMarks' pk=request.user.usr_id %}';" type="button">
+      <span class="iconify" data-icon="akar-icons:edit" data-width="20" data-height="20"></span>
+      Edit Marks
+    </button>
+
+    <!-- Year heading -->
+    <p class="h4"><strong>Academic Analytics</strong></p>
+
+    <!-- Graph-->
+    <section class="graphs d-flex align-items-center justify-content-evenly flex-column flex-md-row flex-wrap">
+      {% for semyear,subcodes in chartdict.items %}
+      <span class="pt-2">
+        <h5 class="h4 d-flex justify-content-center" style="font-size: 16px"><b>{{semyear}}</b></h5>
+        <canvas id="donut-{{semyear}}"></canvas>
+        <canvas id="bar-{{semyear}}"></canvas>
+      </span>
+      {% endfor %}
+    </section>
+
+    <!-- Session Records Button -->
+    <button type="button" class="btn btn-sm ms-auto select-btn d-flex align-items-center justify-content-center mt-2 custom-btn" onclick="window.location.href = '{% url 'student-meeting-records' %}';" type="button">
+      <span class="iconify" data-icon="akar-icons:edit" data-width="20" data-height="20"></span>
+      Session Records
+    </button>
+
+  </section>
+
+</div>
+{% endblock %}

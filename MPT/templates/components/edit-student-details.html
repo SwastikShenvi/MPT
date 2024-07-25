@@ -1,0 +1,471 @@
+{% load static %}
+
+<div class="row text">
+  <div class="col-sm-3" id="spy">
+    <ul class="nav nav-pills flex-column m-3">
+      <li class="nav-item"><a class="nav-link active" name="edit-link" href="#basic">Basic
+          Information</a>
+      </li>
+      <li class="nav-item"><a class="nav-link" name="edit-link" href="#guardian">Guardian
+          Information</a>
+      </li>
+      <li class="nav-item"><a class="nav-link" name="edit-link" href="#health">Health
+          Information</a></li>
+      <li class="nav-item"><a class="nav-link" name="edit-link" href="#goal">Goals, Hobbies
+          and Extra
+          Curriculars</a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-sm-9 scrollspy-example" style="height:65vh" data-spy="scroll" data-target="#spy">
+
+    <div id="basic" name="edit-body">
+
+      <p class="h5" style="margin-top: 0.60rem"><strong>Basic Information</strong></p>
+
+      <!-- First Row  -->
+      <div class="row pt-2">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='fName' class="form-control" id="inputFname" placeholder="First Name" value='{{user.first_name}}'>
+            <label for="inputFname">First Name</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='mName' class="form-control" id="inputMname" placeholder="Middle Name" value={% if  user.middle_name != 'None' %}'{{user.middle_name}}' {% else %} '' {% endif %}>
+            <label for="inputMname">Middle Name</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Row  -->
+      <div class="row pt-3">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='lName' class="form-control" id="inputLname" placeholder="Last Name" value='{{user.last_name}}'>
+            <label for="inputLname">Last Name</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="number" min=1 name='rNo' id="inputRno" class="form-control" placeholder="Roll No" value='{{details.current_rollNo}}'>
+            <label for="inputRno">Roll No</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Third Row  -->
+      <div class="row pt-3">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='sId' id="inputStudentId" class="form-control" placeholder="Student Id" value='{{user.usr_id}}' disabled>
+            <label for="inputStudentId">Student Id</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="date" name='dob' id="inputDob" class="form-control" placeholder="Date Of Birth" value="{% if student.DateofBirth %}{{ student.DateofBirth|date:'Y-m-d' }}{% endif %}">
+            <label for="inputDob">Date Of Birth</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fourth Row  -->
+      <div class="row pt-3">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <textarea type="text" name='Address' class="form-control" id="inputAddress" placeholder="Address">{% if  student.Address != 'None' %}{{student.Address}}{% endif %}</textarea>
+            <label for="inputAddress">Address</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input class="form-control form-control-sm custom-file-input" name='profileImg' type="file" accept="image/png, image/jpeg" id="imgsize" value='{{user.profile_img}}' onchange="validateSize(this)">
+            <label for="formFile" class="form-label">Profile Picture</label>
+            {% if user.profile_img != 'logo.png' %}
+            <strong> image added:</strong>
+            {{user.profile_img |make_list|slice:'7:'|join:''}}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Fifth Row  -->
+      <div class="row pt-3">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='Religion' class="form-control" id="inputReligion" placeholder="Religion" value={% if  student.religion != 'None' %}'{{student.religion}}' {% else %} '' {% endif %}>
+            <label for="inputReligion">Religion</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="tel" name="phone" class="form-control" id="inputContactNo" placeholder="Contact No." pattern="[0-9]{10}" value='{{user.phone}}'>
+            <label for="inputContactNo">Contact No.</label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sixth Row  -->
+      <div class="row pt-3">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <select id="inputYear" class="form-select" name="year">
+              {% if not details.current_year %}
+              <option disabled selected>Please Select Your Current Year</option>
+              {% else %}
+              <option disabled>Please Select Select Your Current Year</option>
+              {% endif %}
+              {% for year in year_list %}
+              {% if details.current_year and details.current_year == year %}
+              <option selected>{{ year}}</option>
+              {% else %}
+              <option>{{ year }}</option>
+              {% endif %}
+              {% endfor %}
+            </select>
+            <label for="inputYear">Year</label> <br>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <select id="inputDept" class="form-select" name="dept">
+              {% if not student.Branch %}
+              <option disabled selected>Please Select Your Department</option>
+              {% else %}
+              <option disabled>Please Select Select Your Department</option>
+              {% endif %}
+              {% for department in department_list %}
+              {% if student.Branch and student.Branch == department %}
+              <option selected>{{ department}}</option>
+              {% else %}
+              <option>{{ department }}</option>
+              {% endif %}
+              {% endfor %}
+
+            </select>
+            <label for="inputDept">Department</label> <br>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seventh Row  -->
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="month" name='Yoa' id="inputDob" class="form-control" placeholder="Year of Admission" value="{% if details.YearOfAdmission %}{{ details.YearOfAdmission }}{% endif %}">
+            <label for="inputYoa">Year of Admission</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <select id="inputGender" class="form-select" name="gender">
+              {% if not student.Gender %}
+              <option disabled selected>Please Select Your Gender</option>
+              {% else %}
+              <option disabled>Please Select Your Gender</option>
+              {% endif %}
+              {% if student.Gender and student.Gender == 'Male' %}
+              <option selected>Male</option>
+              {% else %}
+              <option>Male</option>
+              {% endif %}
+              {% if student.Gender and student.Gender == 'Female' %}
+              <option selected>Female</option>
+              {% else %}
+              <option>Female</option>
+              {% endif %}
+
+            </select>
+            <label for="inputGender">Gender</label> <br>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eighth Row  -->
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <select id="inputBGroup" class="form-select" name="blood_group">
+
+              {% if not student.Blood_grp %}
+              <option disabled selected>Please Select Your Blood Group</option>
+              {% else %}
+              <option disabled>Please Select Your Blood Group</option>
+              {% endif %}
+              {% for bloodGroup in bloodGroup_list %}
+              {% if student.Blood_grp and student.Blood_grp == bloodGroup %}
+              <option selected>{{ bloodGroup}}</option>
+              {% else %}
+              <option>{{ bloodGroup }}</option>
+              {% endif %}
+              {% endfor %}
+
+            </select>
+            <label for="inputBGroup">Blood Group</label> <br>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='mTongue' class="form-control" id="inputMtongue" placeholder="Mother Tongue" value={% if  student.mother_tongue != 'None' %}'{{student.mother_tongue}}' {% else %} '' {% endif %}>
+            <label for="inputMtongue">Mother Tongue</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="guardian" name="edit-body">
+      <p class="h5 pt-3"><strong>Guardian Information</strong>
+      </p>
+      <div class="row">
+        <div class="col-6">
+
+          <!-- Father Details -->
+          <p class="pt-2"><strong>Father</strong></p>
+          {% comment %} <div class="row pt-2"> {% endcomment %}
+
+            <div class="col-12 pt-2">
+              <div class="form-group form-floating col-md-10">
+                <input type="text" name='FatherName' class="form-control" id="inputname" placeholder="FatherName" value={% if  guardian.father_name != 'None' %}'{{guardian.father_name}}' {% else %} '' {% endif %}>
+                <label for="inputname">Full Name</label>
+              </div>
+            </div>
+            {% comment %}
+          </div> {% endcomment %}
+
+          {% comment %} <div class="row pt-3"> {% endcomment %}
+            <div class="col-12 pt-3">
+              <div class="form-group form-floating col-md-10">
+                <select id="inputQualification" class="form-select" name="Fqualification">
+                  {% if not guardian.fatherHighestEducation %}
+                  <option disabled selected>Please Select Highest Qualification</option>
+                  {% else %}
+                  <option disabled>Please Select Highest Qualification</option>
+                  {% endif %}
+                  {% for qualification in  qualification_list %}
+                  {% if guardian.fatherHighestEducation and guardian.fatherHighestEducation == qualification %}
+                  <option selected>{{ qualification}}</option>
+                  {% else %}
+                  <option>{{ qualification }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+                <label for="inputQualfication">Highest Qualification</label> <br>
+              </div>
+            </div>
+
+            {% comment %} <div class="row pt-1"> {% endcomment %}
+              <div class="col-12">
+                <div class="form-group form-floating col-md-10">
+                  <select id="inputoccup" class="form-select" name="Foccup">
+                    {% if not guardian.fatherOccupation %}
+                    <option disabled selected>Please Select Respective Occupation</option>
+                    {% else %}
+                    <option disabled>Please Select Highest Respective Occupation</option>
+                    {% endif %}
+                    {% for occupation in  occupation_list %}
+                    {% if guardian.fatherOccupation and guardian.fatherOccupation == occupation %}
+                    <option selected>{{ occupation}}</option>
+                    {% else %}
+                    <option>{{ occupation }}</option>
+                    {% endif %}
+                    {% endfor %}
+                  </select>
+                  <label for="Foccup">Occupation</label> <br>
+                </div>
+              </div>
+              {% comment %}
+            </div> {% endcomment %}
+            {% comment %}
+          </div> {% endcomment %}
+
+          <div class="col-12">
+            <div class="form-group form-floating col-md-10">
+              <input type="number" min='120000' name='income' id="inputincome" class="form-control" placeholder="Income" value='{{guardian.yearlyIncome}}'>
+              <label for="inputIncome">Yearly Income</label> <br>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Mother Details -->
+        <div class="col-6">
+          <p class="pt-2"><strong>Mother</strong></p>
+
+            <div class="col-12 pt-2">
+              <div class="form-group form-floating col-md-10">
+                <input type="text" name='MotherName' class="form-control" id="inputname" placeholder="MotherName" value={% if  guardian.mother_name != 'None' %}'{{guardian.mother_name}}' {% else %} '' {% endif %}>
+                <label for="inputname">Full Name</label>
+              </div>
+            </div>
+
+            <div class="col-12 pt-3">
+              <div class="form-group form-floating col-md-10">
+                <select id="inputQualification" class="form-select" name="Mqualification">
+                  {% if not guardian.motherHighestEducation %}
+                  <option disabled selected>Please Select Highest Qualification</option>
+                  {% else %}
+                  <option disabled>Please Select Highest Qualification</option>
+                  {% endif %}
+                  {% for qualification in  qualification_list %}
+                  {% if guardian.motherHighestEducation and guardian.motherHighestEducation == qualification %}
+                  <option selected>{{ qualification}}</option>
+                  {% else %}
+                  <option>{{ qualification }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+                <label for="inputQualification">Highest Qualification</label> <br>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group form-floating col-md-10">
+                <select id="inputoccup" class="form-select" name="Moccup">
+                  {% if not guardian.motherOccupation %}
+                  <option disabled selected>Please Select Respective Occupation</option>
+                  {% else %}
+                  <option disabled>Please Select Highest Respective Occupation</option>
+                  {% endif %}
+                  {% for occupation in  occupation_list %}
+                  {% if guardian.motherOccupation and guardian.motherOccupation == occupation %}
+                  <option selected>{{ occupation}}</option>
+                  {% else %}
+                  <option>{{ occupation }}</option>
+                  {% endif %}
+                  {% endfor %}
+                </select>
+                <label for="Moccup">Occupation</label> <br>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="form-group form-floating col-md-10">
+                <input type="number" min='120000' name='income' id="inputincome" class="form-control" placeholder="Income" value='{{guardian.yearlyIncome}}'>
+                <label for="inputIncome">Yearly Income</label> <br>
+              </div>
+            </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!--Health Information-->
+    <div id="health" name="edit-body">
+      <p class="h5 pt-3"><strong>Health Information</strong></p>
+
+      <div class="row pt-2">
+
+          <div class="col-6">
+            <div class="form-group form-floating col-md-10">
+              <input type="text" name='addiction' class="form-control" id="inputAddiction" placeholder="Enter Addiction If Any" value={% if  Medical.addiction != 'None' %}'{{Medical.addiction}}' {% else %} '' {% endif %}>
+              <label for="inputAddiction">Addiction</label>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="form-group form-floating col-md-10">
+              <input type="text" name='illness' class="form-control" id="inputIllness" placeholder="Enter Illness If Any" value={% if  Medical.illness != 'None' %}'{{Medical.illness}}' {% else %} '' {% endif %}>
+              <label for="inputIllness">Illness</label>
+            </div>
+          </div>
+
+      </div>
+
+
+      <div class="row pt-3">
+        <div class="col-6">
+
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='phobia' class="form-control" id="inputPhobias" placeholder="Enter Phobia If Any" value={% if  Medical.phobia != 'None' %}'{{Medical.phobia}}' {% else %} '' {% endif %}>
+            <label for="inputPhobias">Phobia</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group form-floating col-md-10">
+            <input type="text" name='treatment' class="form-control" id="inputTreatments" placeholder="Give Respective Treatments for Above" value={% if  Medical.treatment != 'None' %}'{{Medical.treatment}}' {% else %} '' {% endif %}>
+            <label for="inputTreatments">Treatments</label>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!--Goals, Hobbies and Extra Curriculars-->
+    <div id="goal" name="edit-body">
+      <p class="h5 pt-4"><strong>Goals, Hobbies and Extra
+          Curriculars</strong></p>
+
+      <div class="row pt-2">
+        <div class="col-6">
+          <div class="form-group col-md-10">
+            <label for="inputAim">Aim</label>
+            <textarea type="text" name='aim' class="form-control" id="inputAim" placeholder="Your Aim" value={% if  details.AimOfLife != 'None' %}'{{details.AimOfLife}}' {% else %} '' {% endif %}></textarea>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group col-md-10">
+            <label for="inputHobbies">Hobbies
+              <span class="iconify" data-icon="charm:circle-warning"></span>
+            </label>
+            <textarea type="text" name='hobby' class="form-control" id="inputHobbies" placeholder="Comma separated" value={% if  hobbies.hobby != 'None' %}'{{hobbies.hobby}}' {% else %} '' {% endif %}></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row pt-2">
+        <div class="col-6">
+          <div class="form-group col-md-10">
+            <label for="inputReason">Reason for joining Engineering</label>
+            <textarea type="text" name='ReasonForEngg' class="form-control" id="inputReason" placeholder="Enter Reason" value={% if  details.reason_of_engg != 'None' %}'{{details.reason_of_engg}}' {% else %} '' {% endif %}></textarea>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group col-md-10">
+            <label for="inputAchievements">Achievements
+              <span class="iconify" data-icon="charm:circle-warning"></span>
+            </label>
+            <textarea type="text" name='achievements' class="form-control" id="inputAchievements" placeholder="Comma separated" value={% if  extraCurr.achievements != 'None' %}'{{extraCurr.achievements}}' {% else %} '' {% endif %}></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row pt-2" style="padding-bottom: 8rem">
+        <div class="col-6">
+          <div class="form-group col-md-10">
+            <label for="inputClubs">Clubs
+              <span class="iconify" data-icon="charm:circle-warning"></span>
+            </label>
+            <textarea type="text" name='clubs' class="form-control" id="inputClubs" placeholder="Comma separated" value={% if  extraCurr.clubs != 'None' %}'{{extraCurr.clubs}}' {% else %} '' {% endif %}></textarea>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group col-md-10">
+            <label for="inputorg">Organization
+              <span class="iconify" data-icon="charm:circle-warning"></span>
+            </label>
+            <textarea type="text" name='orgs' class="form-control" id="inputorg" placeholder="Comma separated" value={% if  extraCurr.organization != 'None' %}'{{extraCurr.organization}}' {% else %} '' {% endif %}></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

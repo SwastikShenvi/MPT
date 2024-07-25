@@ -1,0 +1,32 @@
+{% extends "student.html" %}
+{% load static %}
+
+{% block editButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="edit-tab" onClick="window.location.href='{% url 'Edit' %}';" data-bs-toggle="pill" data-bs-target="#edit" type="button" role="tab" aria-controls="edit" aria-selected="false">
+  <span class="iconify" data-icon="akar-icons:edit" data-width="20" data-height="20"></span>
+  &nbsp;Edit Profile
+</button>
+{% endblock %}
+
+{% block editContent %}
+<div class="tab-pane fade show active" id="edit" role="tabpanel" aria-labelledby="edit">
+  <p class="h4 pb-3 d-flex justify-content-center text">
+    <strong>Edit Profile</strong>
+  </p>
+  <form action="{% url 'Edit' %}" method="POST" enctype="multipart/form-data" onsubmit="update.disabled = true; return true;">
+
+    {% csrf_token %}
+
+    {% include 'components/edit-student-details.html' %}
+    <div class="d-flex align-items-center justify-content-center m-3 mt-5">
+      <button type="submit" style="margin-right:10px" class="btn btn-sm update-btn ms-auto custom-btn" name='update'>
+        UPDATE PROFILE
+      </button>
+
+      <button type="button" class="btn btn-sm cancel-btn custom-btn" onClick="window.location.href='{% url 'student' request.user.usr_id %}';">
+        CANCEL
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

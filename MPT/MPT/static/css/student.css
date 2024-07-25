@@ -1,0 +1,74 @@
+/* sidebar */
+.sidebar {
+  background-color: var(--content-bg);
+  border-radius: 13px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  margin: 5.5vh 0 10px 0;
+}
+
+/* Nav Pill */
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+  background-color: var(--btn-bg);
+  color: var(--text-component);
+}
+.nav-pills-link {
+  color: var(--btn-bg);
+}
+
+/* Nav-Tab */
+.nav-link {
+  color: var(--navbar-bg);
+}
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: var(--body-bg);
+  background-color: var(--btn-bg);
+  border-color: var(--navbar-bg) var(--navbar-bg) var(--text-body);
+}
+.nav-tabs .nav-link {
+  border-bottom: 3px solid transparent;
+}
+
+/* Student Dashboard */
+.accordion-item,
+.accordion-button{
+  background-color: var(--body-bg);
+}
+.accordion{
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px !important;
+  border-radius: 10px !important;
+}
+.scrollspy-example {
+  position: relative;
+  height: 250px;
+  overflow: auto;
+}
+.stu-image {
+  display: block;
+  border: none;
+  border-radius: 10px;
+  max-height: 24vh !important; 
+  max-width: 11vw !important; 
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+/* Graph */
+.graphs > span {
+  max-width: 350px;
+}
+
+.graphs > span > canvas {
+  width:500px; 
+  height:250px;
+}
+
+@media (max-width:800px) {
+  .accordion-div{
+    padding-top: 1rem  !important;
+  }
+}
+@media (max-width:992px) {
+  .accordion-div{
+    padding-top: 1rem  !important;
+  }
+}

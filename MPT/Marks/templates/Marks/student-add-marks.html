@@ -1,0 +1,121 @@
+{% extends "student.html" %}
+{% load static %}
+
+{% block dashboardButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="dashboard-tab" onClick="window.location.href='{% url 'student' request.user.usr_id %}';" data-bs-toggle="pill" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+  aria-selected="true">
+  <span class="iconify" data-icon="ci:dashboard" data-width="20" data-height="20"></span>
+  &nbsp;Dashboard
+</button>
+{% endblock %}
+
+{% block dashboardContent %}
+<div class="tab-pane fade show active text" id="dashboard" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+
+  <div class="d-flex align-items-center justify-content-center mt-3 mb-3">
+    <h1 style="font-size: 25px; justify-content: center;">
+      <strong>Add Marks</strong>
+    </h1>
+  </div>
+
+  <form action="" method="POST">
+    {% csrf_token %}
+    <!-- First Row  -->
+    <div class="row">
+      <div class="col-6 full-width-sm d-flex justify-content-center">
+        <div class="form-group form-floating col-md-10">
+          <input type="text" name='sCode' class="form-control" id="inputScode" placeholder="Subject Code" value=''  required>
+          <label for="inputScode">Subject Code</label>
+        </div>
+      </div>
+
+      <div class="col-6 full-width-sm d-flex justify-content-center">
+        <div class="form-group form-floating col-md-10">
+          <input type="text" name='sName' class="form-control" id="inputSname" placeholder="Subject Name" value='' required>
+          <label for="inputSname">Subject Name</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Row  -->
+    <div class="row pt-3">
+      <div class="col-6 full-width-sm d-flex justify-content-center">
+        <div class="form-group form-floating col-md-10">
+          <select id="inputSemester" class="form-select" name="semester" required>
+            <option>I</option>
+            <option>II</option>
+            <option>III</option>
+            <option>IV</option>
+            <option>V</option>
+            <option>VI</option>
+            <option>VII</option>
+            <option>VIII</option>
+          </select>
+          <label for="inputSemester">Semester</label> <br>
+        </div>
+      </div>
+
+      <div class="col-6 full-width-sm d-flex justify-content-center">
+        <div class="form-group form-floating col-md-10">
+          <select id="inputYear" class="form-select" name="year" required>
+            <option>FE</option>
+            <option>SE</option>
+            <option>TE</option>
+            <option>BE</option>
+          </select>
+          <label for="inputYear">Year</label> <br>
+        </div>
+      </div>
+    </div>
+
+    <!-- Third Row  -->
+    <div class="row">
+
+      <div class="col-6 full-width-sm d-flex justify-content-center">
+        <div class="form-group form-floating col-md-10">
+          <select id="inputExam" class="form-select" name="exam" required>
+            <option>IA1</option>
+            <option>IA2</option>
+            <option>ESE</option>
+          </select>
+          <label for="inputExam">Exam</label> <br>
+        </div>
+      </div>
+
+      <div class="col-6 full-width-sm d-flex justify-content-center">
+        <div class="form-group form-floating col-md-10">
+          <input type="number" name='marks' class="form-control" id="inputMarks" placeholder="Marks Obtained" min="0" max="100" required>
+          <label for="inputMarks">Marks Obtained</label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Forth Row  -->
+    <div class="row">
+
+      <div class="col-6 full-width-sm" style="display: flex; justify-content: center;">
+        <div class="form-group form-floating col-md-10">
+          <input type="number" name='totalMarks' class="form-control" id="inputTotalMarks" placeholder="Out Of" min="0" max="100" required>
+          <label for="inputTotalMarks">Out Of</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- buttons -->
+    <div class="d-flex align-items-center justify-content-center m-3">
+
+      <button type="submit" class="btn btn-sm update-btn ms-auto">
+        Add
+      </button>
+
+      <button type="button" class="btn btn-sm cancel-btn" onclick="window.history.go(-1); return false;" style="margin-left: 10px;">
+        Cancel
+      </button>
+
+    </div>
+  </form>
+
+</div>
+{% endblock %}

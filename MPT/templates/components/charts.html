@@ -1,0 +1,125 @@
+{% for semyear,subcodes in chartdict.items %}
+var xValues = [];
+var ia1Values = [];
+var ia2Values = [];
+var eseValues = [];
+
+{% for subcode,sub_marks in subcodes.items %}
+  xValues.push('{{subcode}}');
+  ia1Values.push(0);
+  ia2Values.push(0);
+  eseValues.push(0);
+  {% for sub_mark in sub_marks %}
+  if("{{sub_mark.exam}}" == "IA1"){
+    ia1Values.pop();
+    ia1Values.push({{sub_mark.marks}});
+  }
+  else if("{{sub_mark.exam}}" == "IA2"){
+    ia2Values.pop();
+    ia2Values.push({{sub_mark.marks}});
+  }
+  else if("{{sub_mark.exam}}" == "ESE"){
+    eseValues.pop();
+    eseValues.push({{sub_mark.marks}});
+  }
+  {% endfor %}
+{% endfor %} 
+
+var ia1Color = ["#FA1E0E", "#FFCA03", "#42E6A4", "#3EDBF0", "#C355F5"];
+var ia2Color = ["#BD2000", "#FF5403", "#02A8A8", "#77ACF1", "#AA26DA"];
+var eseColor = ["#8C0000", "#F90716", "#018383", "#04009A", "#851DE0"];
+
+// Horizontal bar chart 
+new Chart("bar-{{semyear}}", {
+  type: "horizontalBar",
+  data: {
+    labels: xValues,
+    datasets: [
+      {
+        backgroundColor: ia1Color,
+        data: ia1Values,
+      },
+      {
+        backgroundColor: ia2Color,
+        data: ia2Values,
+      },
+      {
+        backgroundColor: eseColor,
+        data: eseValues,
+      },
+    ],
+  },
+  
+  options: {
+    responsive: true,
+    legend: { display: false },
+    title: {
+      position: "bottom",
+      display: true,
+      font: {style: 'italic'}
+    },
+    scales: {
+      xAxes: [
+        {
+          stacked: true,
+          ticks: { min: 0, max: 100 },
+        },
+      ],
+      yAxes: [
+        {
+          display: false,
+          stacked: true,
+        },
+      ],
+    },
+  },
+});
+{% endfor %}
+
+// Doughtnut 
+{% for semyear,subcodes in chartdict.items %}
+var xValues = [{% for subcode,sub_marks in subcodes.items %}{% for sub_mark in sub_marks %}{% if sub_mark.exam == 'ESE' %}"{{subcode}}",{% endif %}{% endfor %}{% endfor %}];
+var yValues = [{% for subcode,sub_marks in subcodes.items %}{% for sub_mark in sub_marks %}{% if sub_mark.exam == 'ESE' %}{{sub_mark.marks}},{% endif %}{% endfor %}{% endfor %}];
+var barColors = ["#8C0000", "#F90716", "#018383", "#04009A", "#851DE0"];
+
+var stackedText = {
+  id: "stackedText",
+  afterDatasetsDraw(chart, args, options) {
+    const {
+      ctx,
+      data,
+      chartArea: { top, bottom, left, right, width, height },
+    } = chart;
+    ctx.save();
+    ctx.font = "bolder 13px Arial";
+    // ctx.fillStyle = localStorage.getItem('theme') == 'dark' ?"#e5e9f0":"#111318";
+    ctx.textAlign = "center";
+    {% for sem,cgpa in cgpa_dict.items %}
+      {% if semyear|slice:"3:" == sem %}
+      ctx.fillText("{% if cgpa %}{{cgpa}}{% endif %}", (left + right) / 2, (bottom + top) / 2 - 5);
+      ctx.restore();
+      
+      ctx.font = "bold 8px Arial";
+      // ctx.fillStyle = localStorage.getItem('theme') == 'dark' ?"#e5e9f0":"#111318";
+      ctx.textAlign = "center";
+      ctx.fillText("{% if cgpa %}CGPA{% endif %}", (left + right) / 2, (bottom + top) / 2 + 5);
+      {% endif %}
+      {% endfor %}
+  },
+};
+
+new Chart("donut-{{semyear}}", {
+  type: "doughnut",
+  data: {
+    labels: xValues,
+    datasets: [
+      {
+        backgroundColor: barColors,
+        data: yValues,
+      },
+    ],
+  },
+  maintainAspectRatio: false,
+  plugins: [stackedText],
+});
+{% endfor %}

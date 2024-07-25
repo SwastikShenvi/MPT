@@ -1,0 +1,175 @@
+{% extends "faculty.html" %}
+{% load static %}
+
+{% block dashboardButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="dashboard-tab" onclick="window.location.href = '{% url 'faculty' faculty.usr_id%}';" data-bs-toggle="pill" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+  aria-selected="true">
+  <span class="iconify" data-icon="ci:dashboard" data-width="20" data-height="20"></span>
+  &nbsp;Dashboard
+</button>
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-main sticky-top shadow-lg navbar-expand-lg pt-0 pb-0">
+  <div class="container-fluid">
+    <a class="navbar-brand" onClick="window.location.reload();">
+      <img src="{% static 'content/dbit.png' %}" class="image2-rounded-circle"  alt="" >
+    </a>
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-content">
+      <div class="hamburger-toggle">
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar-content">
+      <div class="ms-auto">
+        {% if faculty.is_authenticated %}
+
+        <a class="navbar-brand" onClick="window.location.reload();">
+          <img src="{{faculty.profile_img.url}}" class=" image2">
+          {% if faculty.first_name and faculty.last_name %}{{faculty.first_name}} {{faculty.last_name}} {% endif %}
+        </a>
+        {% endif %}
+      </div>
+
+      <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
+
+        <span class="d-inline-block" id="dark-mode-toggle" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle Dark Mode">
+          <li class="nav-item-main">
+            <button type="button" class="btn" data-toggle="button"><span class="iconify  iconify-navbar" data-icon="bi:moon" data-width="24" data-height="26"></span></button>
+          </li>
+        </span>
+
+        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Error/Suggestion">
+          <li class="nav-item-main">
+            <a class="nav-link" id="iconifySuggestion" target="_blank" href="https://forms.gle/tXeDmWwnRybmcARLA">
+              <span class="iconify iconify-navbar" data-icon="fluent:person-feedback-24-regular" data-width="28" data-height="28"></span>
+            </a>
+          </li>
+        </span>
+
+        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Change Password">
+          <li class="nav-item-main">
+            <a class="nav-link" id="iconifyChangePassword" href="{% url 'ChangePassword' %}">
+              <span class="iconify iconify-navbar" data-icon="teenyicons:password-outline" data-width="25" data-height="25"></span>
+            </a>
+          </li>
+        </span>
+
+        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="left" title="Log Out">
+          <li class="nav-item-main">
+            <a class="nav-link" id="iconifyLogOut" href="{% url 'logout' %}">
+              <span class="iconify iconify-navbar" data-icon="ic:outline-log-in" data-width="25" data-height="25"></span>
+            </a>
+          </li>
+        </span>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+
+
+{% block dashboardContent %}
+<div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+  <section class="m-5 mt-1 text">
+    <span class="stu-prof-info">
+      <div class="stu-info">
+
+        <!--Student Name-->
+        <p style="font-size: 25px; padding-bottom: 1rem; display: flex; justify-content: center;">
+          <strong>{{user.first_name}} {{user.last_name}} </strong>
+        </p>
+
+        <!--Edit Student Details Button-->
+        <div class="d-flex align-items-center justify-content-center mb-3">
+          <button type="button" class="btn btn-sm ms-auto select-btn custom-btn d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#edit-details">
+            <span class="iconify" data-icon="mdi:account-edit" data-width="20" data-height="20"></span>
+            Edit Details
+          </button>
+        </div>
+
+        <!-- Edit Student Details Modal -->
+        <div class="modal fade" id="edit-details" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                  <!--Edit Student Details-->
+                  {% include 'components/edit-student-details.html' %}
+                </div>
+
+                <div class="modal-footer pb-0">
+                  <button type="submit" class="btn btn-sm update-btn">
+                    Save changes
+                  </button>
+                  <button type="button" class="btn btn-sm cancel-btn" data-bs-dismiss="modal">
+                    Close
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <!--Student Image-->
+          <div class="col-lg-2 col-md-12 col-sm-12 d-flex align-items-center justify-content-center">
+            <img src="{{user.profile_img.url}}" class="stu-image" alt="hero">
+          </div>
+
+          <!-- Student Info -->
+          <div class="col-lg-10 accordion-div">
+            <div class="accordion accordion-flush rounded" id="accordionFlushExample">
+
+              <!--Stduent Information Accordion-->
+              {% include 'components/accordion-stu-info.html' %}
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </span>
+
+    <!--Edit marks button-->
+    <button type="button" class="btn btn-sm ms-auto select-btn d-flex align-items-center justify-content-center mt-4 custom-btn" onclick="window.location.href = '{% url 'facultyStudentMarks' student.user.usr_id %}';" type="button">
+      <span class="iconify" data-icon="akar-icons:edit" data-width="20" data-height="20"></span>
+      Edit Marks
+    </button>
+
+    <!-- Year heading -->
+    <p class="h4"><strong>Academic Analytics</strong></p>
+
+    <!-- Graph-->
+    <section class="graphs d-flex align-items-center justify-content-evenly flex-column flex-md-row flex-wrap">
+      {% for semyear,subcodes in chartdict.items %}
+      <span>
+        <h5 class="h4 d-flex justify-content-center" style="font-size: 16px"><b>{{semyear}}</b></h5>
+        <canvas id="donut-{{semyear}}"></canvas>
+        <canvas id="bar-{{semyear}}"></canvas>
+      </span>
+      {% endfor %}
+    </section>
+
+    <!-- Session Records Button -->
+    <button type="button" class="btn btn-sm ms-auto select-btn d-flex align-items-center justify-content-center mt-4 custom-btn"
+      onclick="window.location.href = '{% url 'induvidual-meeting-records' fac_id=faculty.usr_id stu_id=student.user.usr_id %}';" type="button"> <span class="iconify" data-icon="akar-icons:edit" data-width="20" data-height="20"></span>
+      Session Records
+    </button>
+
+  </section>
+
+</div>
+{% endblock %}

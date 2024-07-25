@@ -1,0 +1,163 @@
+{% extends "faculty.html" %}
+{% load static %}
+
+{% block meetingButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="meeting-tab" onclick="window.location.href = '{% url 'faculty-meeting' %}';" data-bs-toggle="pill" data-bs-target="#meeting" type="button" role="tab" aria-controls="meeting" aria-selected="false">
+  <span class="iconify-inline" data-icon="akar-icons:schedule" data-width="21" data-height="21"></span>
+  &nbsp;Meeting
+</button>
+{% endblock %}
+
+{% block announcementContent %}
+<div class="tab-pane fade show active" id="announcement" role="tabpanel" aria-labelledby="announcement">
+  <div class="tab-pane fade show active m-5 mt-0 mb-0 text" id="announcement" role="tabpanel" aria-labelledby="announcement">
+
+    <div class="d-flex align-items-center justify-content-center mt-3 mb-3">
+      <h1 style="font-size: 25px; justify-content: center;">
+        <strong>Schedule Meeting</strong>
+      </h1>
+    </div>
+
+    <form method="GET" action={% url 'faculty-meeting' %}>
+      <div class="mb-3">
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inputRadioFe" value="FE" {{FE}} required>
+          <label class="form-check-label" for="inputRadioFe">FE</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inputRadioSe" value="SE" {{SE}} required>
+          <label class="form-check-label" for="inputRadioSe">SE</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inputRadioTe" value="TE" {{TE}} required>
+          <label class="form-check-label" for="inputRadioTe">TE</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inputRadioBe" value="BE" {{BE}} required>
+          <label class="form-check-label" for="inputRadioBe">BE</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inputRadioGrad" value="Graduated" {{Graduated}} required>
+          <label class="form-check-label" for="inputRadioGrad">Graduated</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inputRadioAll" value="ALL" {{ALL}} required>
+          <label class="form-check-label" for="inputRadioAll">ALL</label>
+        </div>
+
+        <button type="submit" class="btn btn-sm custom-btn" style="width: auto; border-radius: 7px;">
+          Filter
+        </button>
+      </div>
+    </form>
+
+    <form method="POST" action={% url 'faculty-meeting' %} onsubmit="schedule.disabled = true; return true;">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label for="inputTitle" class="form-label"><strong>Title</strong></label>
+        <input type="text" name='title' placeholder="Title" class="form-control" id="inputTitle" required>
+      </div>
+
+      <div class="mb-4">
+        <label for="inputMode" class="form-label"><strong>Mode</strong></label>&nbsp;&nbsp;
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="mode" id="inputRadioOnline" value="Online" required>
+          <label class="form-check-label" for="inputRadioOnline">Online</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="mode" id="inputRadioOffline" value="Offline" required>
+          <label class="form-check-label" for="inputRadioOffline">Offline</label>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="inputVenue" class="form-label"><strong>Link / Venue</strong></label>
+        <input type="text" name='link_or_venue' placeholder="Meeting Link / Venue" class="form-control" id="inputVenue" required>
+      </div>
+
+      {% comment %} <div class="mb-4">
+        <label for="inputLink" class="form-label"><strong>Meeting Link </strong></label>
+        <input type="url" name='link' placeholder="Meeting Link starting with http:// OR https://" class="form-control" id="inputLink"
+          value={% if request.user.mentorprofile.meeting_link is not None %}{{request.user.mentorprofile.meeting_link}}{% endif %}>
+      </div> {% endcomment %}
+
+      <div class="mb-4">
+        <label for="inputDescription" class="form-label"><strong>Description</strong></label>
+        <textarea class="form-control" name='content' id="inputDescription" rows="4" required></textarea>
+      </div>
+
+      <div class="mb-4">
+        <div class="row">
+          <div class="col-6">
+            <label for="inputDate" class="form-label"><strong>Date</strong></label>&nbsp;&nbsp;
+            <input type="date" name="date" required pattern="dd-mm-yyyy">
+          </div>
+          <div class="col-6">
+            <label for="inputTime" class="form-label"><strong>Time</strong></label>&nbsp;&nbsp;
+            <input type="time" id="inputTime" name="time" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="inputSendto" class="form-label mb-0"><strong>Send To</strong></label>
+        <div class="d-flex align-items-center justify-content-center">
+          <textarea type='text' class="form-control justify-content-center" style="font-size: 14pt; height: 30px; width:400px;" id='inputSendto' readonly name='sendTo'></textarea>
+        </div>
+
+        <!-- table -->
+        <div class="table-div mt-2">
+          <table class="table table-striped table-hover table-bordered text" id="sendTo-table">
+            <thead>
+              <tr>
+                <th scope="col" class="px-2 py-1 text-center">Select</th>
+                <th scope="col" class="px-2 py-1 text-center">Student Id</th>
+                <th scope="col" class="px-2 py-1 text-center">Name</th>
+                <th scope="col" class="px-2 py-1 text-center">Email</th>
+                <th scope="col" class="px-2 py-1 text-center">Roll No.</th>
+                <th scope="col" class="px-2 py-1 text-center">Gender</th>
+                <th scope="col" class="px-2 py-1 text-center">Department</th>
+                <th scope="col" class="px-2 py-1 text-center">Current Year</th>
+                <th scope="col" class="px-2 py-1 text-center">Passout Year</th>
+              </tr>
+            </thead>
+            <tbody id="">
+              {% for student in students %}
+              <tr>
+                <td class="px-2 py-1 text-center">
+                  <span class="mb-3">
+                    <input type="checkbox" value="{{student.Mentee.user.usr_id}}" class="chkvalues" name="mentee_list" id="select-mentee">
+                  </span>
+                </td>
+                <th class="px-2 py-1 text-center">{{student.Mentee.user.usr_id}}</th>
+                <th scope="row" class="px-2 py-1 text-center">{{student.Mentee.user.first_name}} {{student.Mentee.user.last_name}}</th>
+                <td class="px-2 py-1 text-center">{{student.Mentee.user.email}}</td>
+                <td class="px-2 py-1 text-center">{% if student.Mentee.studentdetails.current_rollNo is not None %}{{student.Mentee.studentdetails.current_rollNo}}{% endif %}</td>
+                <td class="px-2 py-1 text-center">{% if student.Mentee.Gender is not None %}{{ student.Mentee.Gender }}{% endif %}</td>
+                <td class="px-2 py-1 text-center">{% if student.Mentee.Branch is not None %}{{ student.Mentee.Branch }}{% endif %}</td>
+                <td class="px-2 py-1 text-center">{% if student.Mentee.studentdetails.current_year is not None %}{{ student.Mentee.studentdetails.current_year }}{% endif %}</td>
+                <td class="px-2 py-1 text-center">{% if student.Mentee.studentdetails.Passout_year is not None %}{{ student.Mentee.studentdetails.Passout_year }}{% endif %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-center mt-4 mb-3">
+          <button type="submit" class="btn ms-auto btn-sm custom-btn" name='schedule'>
+            Schedule
+          </button>
+        </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

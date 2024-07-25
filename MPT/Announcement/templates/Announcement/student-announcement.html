@@ -1,0 +1,86 @@
+{% extends "student.html" %}
+{% load static %}
+
+{% block announcementButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="announcement-tab" onClick="window.location.reload();" data-bs-toggle="pill" data-bs-target="#announcement" type="button" role="tab" aria-controls="announcement" aria-selected="false">
+  <span class="iconify" data-icon="bx:message-detail" data-width="20" data-height="20"></span>
+  &nbsp;Announcement
+</button>
+{% endblock %}
+
+{% block announcementContent %}
+<div class="tab-pane fade show active" id="announcement" role="tabpanel" aria-labelledby="announcement">
+  <div class="tab-pane fade show active m-5 mt-0 mb-0 text" id="announcement" role="tabpanel" aria-labelledby="announcement">
+
+    {% if receivers %}
+    <div class="d-flex align-items-center justify-content-center mt-3 mb-3">
+      <h1 style="font-size: 25px; justify-content: center;">
+        <strong>Announcement</strong>
+      </h1>
+    </div>
+    {% for receiver in receivers %}
+    {% if receiver.receiver == request.user %}
+    <div class="card  mb-4">
+      <div class="card-header">
+        <img class="rounded-circle image3" src="{{receiver.announcement.sender.profile_img.url}}" height="48" width="48">
+        {% if receiver.announcement.sender.is_superuser %}
+        MPT Admin
+        {% else %}
+        {{receiver.announcement.sender.first_name}} {{receiver.announcement.sender.last_name}}
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <a href="">
+          <h3 class="card-title text-muted">{{receiver.announcement.title}}</h3>
+        </a>
+        <p class="card-text">
+          {{receiver.announcement.content}}
+        </p>
+      </div>
+      <div class="card-footer">
+        {{receiver.announcement.date|date:"D d M Y" }} {{receiver.announcement.date|time}}
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% else %}
+    <div class="d-flex align-items-center justify-content-center mt-3 mb-3 mb-4">
+      <p style="font-size: 25px; justify-content: center;">
+        <strong>No Announcements</strong>
+      </p>
+    </div>
+    {% endif %}
+
+    <!--Pagination buttons-->
+    <div class="d-flex align-items-center justify-content-center mb-0">
+
+      {% if is_paginated  %}
+
+      {% if page_obj.has_prevoius %}
+      <a class="btn btn-sm btn-outline-secondary mb-4 left" href="?page=1">First </a>
+      <a class="btn btn-sm btn-outline-secondary mb-4 middle" href="?page={{page_obj.previous_page_number}}">Previous </a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+      <a class="btn btn-sm btn-outline-secondary mb-4 middle" href="?page={{num}}">{{num}} </a>
+
+      {% elif num > page_obj.number|add:'-3'  and num < page_obj.number|add:'3' %}
+      <a class="btn btn-sm btn-outline-secondary mb-4 middle" href="?page={{num}}">{{num}} </a>
+
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_prevoius %}
+      <a class="btn btn-sm btn-outline-secondary mb-4 middle" href="?page={{page_obj.next_page_number}}">Next </a>
+      <a class="btn btn-sm btn-outline-secondary mb-4 right" href="?page={{page_obj.paginator.num_pages}}">Last </a>
+      {% endif %}
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

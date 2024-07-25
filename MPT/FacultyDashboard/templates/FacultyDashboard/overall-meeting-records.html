@@ -1,0 +1,123 @@
+{% extends "faculty.html" %}
+{% load static %}
+
+{% block dashboardButton %}
+<button class="nav-link active nav-pills-link text-left d-flex align-items-center" id="dashboard-tab" onClick="window.location.href='{% url 'faculty' user.usr_id %}';" data-bs-toggle="pill" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+  aria-selected="true">
+  <span class="iconify" data-icon="ci:dashboard" data-width="20" data-height="20"></span>
+  &nbsp;Dashboard
+</button>
+{% endblock %}
+
+
+{% block dashboardContent%}
+<div class="tab-pane fade show active text" id="dashboard" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+  <div class="d-flex align-items-center justify-content-center mt-3 mb-3">
+    <h1 style="font-size: 25px; justify-content: center;">
+      <strong>Meeting Records</strong>
+    </h1>
+  </div>
+
+  <nav class="m-2 mt-0">
+    <div class="nav nav-tabs nav-justified mt-3" id="nav-tab" role="tablist">
+      <button class="nav-link" id="nav-previous-tab" data-bs-toggle="tab" data-bs-target="#nav-previous" type="button" role="tab" aria-controls="nav-prevoius" aria-selected="false">Previous Meetings</button>
+      <button class="nav-link active" id="nav-upcoming-tab" data-bs-toggle="tab" data-bs-target="#nav-upcoming" type="button" role="tab" aria-controls="nav-upcoming-tab" aria-selected="true">Upcoming Meetings</button>
+    </div>
+  </nav>
+
+  <div class="tab-content m-2 mt-4" id="nav-tabContent">
+    <!-- Previous -->
+    <div class="tab-pane fade table-div" id="nav-previous" role="tabpanel" aria-labelledby="nav-previous-tab">
+      <table class="table table-striped table-hover table-bordered table-sm text" style="widows: 100%;" id="previous-table">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col">Date</th>
+            <th class="text-center" scope="col">Time</th>
+            <th class="text-center" scope="col">Title</th>
+            <th class="text-center" scope="col">Mode</th>
+            <th class="text-center" scope="col">Venue/link</th>
+            <th class="text-center" scope="col">Mentee</th>
+            <th class="text-center" scope="col">Attendance</th>
+            <th class="text-center" scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for meeting in meetings %}
+          {% if meeting.Sender.user == request.user %}
+          {% if todays_date >= meeting.Meeting_date and current_time > meeting.Meeting_time %}
+          <tr>
+            <th class="text-center" scope="row">{{meeting.Meeting_date}}</th>
+            <td class="text-center">{{meeting.Meeting_time}}</td>
+            <td class="text-center">{{meeting.Meeting_title}}</td>
+            <td class="text-center">{{meeting.Meeting_mode}}</td>
+            <td class="text-center">{{meeting.Meeting_link_or_venue}}</td>
+            <td class="text-center">{{meeting.Receiver.user.first_name}} {{meeting.Receiver.user.last_name}}</td>
+            <td class="text-center">
+              {% if meeting.meetingattendance%}
+              {% if meeting.meetingattendance.Attendance %}
+              Present
+              {% else %}
+              Absent
+              {% endif %}
+              {% else %}
+              Absent
+              {% endif %}
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-sm meetings-btn custom-btn" onClick="window.location.href='{% url 'meeting-notes' meeting.Meeting_id %}';">
+                <span class="iconify" data-icon="gg:notes" data-width="15" data-height="15"></span>
+                &nbsp;Note
+              </button>
+            </td>
+          </tr>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Upcoming -->
+    <div class="tab-pane fade show active" id="nav-upcoming" role="tabpanel" aria-labelledby="nav-upcoming-tab">
+      <table class="table table-hover table-sm text" style="widows: 100%;" id="upcoming-table">
+        <thead>
+          <tr>
+            <th class="text-center" scope="col">Date</th>
+            <th class="text-center" scope="col">Time</th>
+            <th class="text-center" scope="col">Title</th>
+            <th class="text-center" scope="col">Mode</th>
+            <th class="text-center" scope="col">Venue/link</th>
+            <th class="text-center" scope="col">Mentee</th>
+            <th class="text-center" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for meeting in meetings %}
+          {% if meeting.Sender.user == request.user %}
+          {% if todays_date <= meeting.Meeting_date and current_time < meeting.Meeting_time or not todays_date >= meeting.Meeting_date and current_time > meeting.Meeting_time%}
+          <tr>
+            <th class="text-center" scope="row">{{meeting.Meeting_date}}</th>
+            <td class="text-center">{{meeting.Meeting_time}}</td>
+            <td class="text-center">{{meeting.Meeting_title}}</td>
+            <td class="text-center">{{meeting.Meeting_mode}}</td>
+            <td class="text-center">{{meeting.Meeting_link_or_venue}}</td>
+            <td class="text-center">{{meeting.Receiver.user.first_name}} {{meeting.Receiver.user.last_name}}</td>
+            <td class="text-center">
+              <form action="{% url 'delete-meeting-record' meeting.Meeting_id %}" class="mb-0" style="" method='POST'>
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger ms-auto btn-sm" style="border-color: black" onClick="return confirm('Are you sure Do you want to delete this meeting record ?');">
+                  <span class="iconify" data-icon="ant-design:delete-filled" data-width="17" data-height="18"></span>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
